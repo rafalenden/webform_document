@@ -1,0 +1,9 @@
+#edit-custom-replacements {
+  /*border: 1px solid black;*/
+}
+#edit-custom-replacements > legend {
+  font-size: 130%;
+}
+#edit-custom-replacements > .fieldset-wrapper > fieldset {
+  border-bottom: 1px solid black;
+}

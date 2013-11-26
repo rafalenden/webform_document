@@ -1,0 +1,9 @@
+name = Webform Document
+description = Replace tokens with Webform component values in Word documents.
+package = Webform
+core = 7.x
+
+dependencies[] = webform (3.x)
+dependencies[] = token
+dependencies[] = webform_tokens
+dependencies[] = libraries
