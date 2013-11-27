@@ -93,7 +93,7 @@ function webform_document_submission_page($node, $submission) {
 
   $data = array(
     'node' => $node,
-    'webform' => $submission,
+    'webform-submission' => $submission,
   );
 
   webform_document_apply_replacements($input_file, $data, $node->webform['document_template']['custom_replacements']);
