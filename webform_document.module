@@ -256,6 +256,10 @@ function webform_document_webform_submission_insert($node, $submission) {
 }
 
 function webform_document_libreoffice_path() {
+  if (!module_exists('libraries')) {
+    return FALSE;
+  }
+
   $libreoffice_path = libraries_get_path('libreoffice_cde');
 
   // LibreOffice does not exists.

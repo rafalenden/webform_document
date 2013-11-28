@@ -5,4 +5,3 @@ core = 7.x
 
 dependencies[] = webform (>=4.x)
 dependencies[] = token
-dependencies[] = libraries
