@@ -55,7 +55,7 @@ function webform_document_form($form, &$form_state, $node) {
   );
   $form['available_tokens']['tokens'] = array(
     '#theme' => 'token_tree',
-    '#token_types' => array('node', 'webform'),
+    '#token_types' => array('node', 'submission'),
     '#global_types' => TRUE,
     '#click_insert' => FALSE,
   );
