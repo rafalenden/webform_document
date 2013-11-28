@@ -18,7 +18,7 @@ function webform_document_form($form, &$form_state, $node) {
   $form['#attached']['css'][] = $path . '/webform_document.css';
 
   $custom_replacements = isset($node->webform['document_template']['custom_replacements'])
-     ? $node->webform['document_template']['custom_replacements'] : array();
+    ? $node->webform['document_template']['custom_replacements'] : array();
 
   $form['output_type'] = array(
     '#title' => t('Output type'),
@@ -27,7 +27,8 @@ function webform_document_form($form, &$form_state, $node) {
       'docx' => t('Word docx'),
     ),
     '#default_value' => isset($node->webform['document_template']['output_type'])
-       ? $node->webform['document_template']['output_type'] : 'docx',
+      ? $node->webform['document_template']['output_type']
+      : 'docx',
   );
   if (webform_document_libreoffice_path()) {
     $form['output_type']['#options']['pdf'] = t('PDF');
@@ -40,11 +41,11 @@ function webform_document_form($form, &$form_state, $node) {
     '#description' => t('Allowed file types: !extensions.', array('!extensions' => '<strong>docx</strong>')),
     '#type' => 'managed_file',
     '#upload_location' => WEBFORM_DOCUMENT_INPUT_DIR,
-    '#default_value' => isset($node->webform['document_template']['fid']) ? $node->webform['document_template']['fid']
-       : NULL,
+    '#default_value' => isset($node->webform['document_template']['fid'])
+      ? $node->webform['document_template']['fid']
+      : NULL,
     '#upload_validators' => array(
       'file_validate_extensions' => array('docx'),
-//      'file_validate_size' => array($max_file_size * 1024 * 1024),
     ),
   );
   $form['available_tokens'] = array(
@@ -85,8 +86,8 @@ function webform_document_form($form, &$form_state, $node) {
       '#title' => t('Search for'),
       '#size' => 20,
       '#default_value' => isset($custom_replacements[$i]['search'])
-         ? $custom_replacements[$i]['search']
-         : NULL,
+        ? $custom_replacements[$i]['search']
+        : NULL,
     );
     $form['custom_replacements'][$i]['replace'] = array(
       '#title' => t('Replace with'),
@@ -94,8 +95,8 @@ function webform_document_form($form, &$form_state, $node) {
       '#type' => 'textarea',
       '#rows' => 2,
       '#default_value' => isset($custom_replacements[$i]['replace'])
-         ? $custom_replacements[$i]['replace']
-         : NULL,
+        ? $custom_replacements[$i]['replace']
+        : NULL,
     );
     if (module_exists('php') && user_access('use PHP for settings')) {
       $form['custom_replacements'][$i]['replace']['#description'] = t('To use PHP wrap code in &lt;?php ?&gt; tags. It is also possible to use tokens.');
@@ -152,8 +153,7 @@ function webform_document_form_ajax_callback($form, $form_state) {
 }
 
 /**
- * Submit handler for the "add-one-more" button.
- *
+ * Submit handler for the "Add replacement" button.
  * Increments the max counter and causes a rebuild.
  */
 function webform_document_form_add_more($form, &$form_state) {
@@ -161,6 +161,10 @@ function webform_document_form_add_more($form, &$form_state) {
   $form_state['rebuild'] = TRUE;
 }
 
+/**
+ * Submit handler for the "Remove last" button.
+ * Removes last custom replacement.
+ */
 function webform_document_form_remove_last($form, &$form_state) {
   if ($form_state['custom_replacements_count'] > 0) {
     $form_state['custom_replacements_count']--;

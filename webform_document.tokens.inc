@@ -20,16 +20,6 @@ function webform_document_token_info() {
  */
 function webform_document_tokens($type, $tokens, array $data = array(), array $options = array()) {
   $replacements = array();
-
-  $url_options = array('absolute' => TRUE);
-  if (isset($options['language'])) {
-    $url_options['language'] = $options['language'];
-    $language_code = $options['language']->language;
-  }
-  else {
-    $language_code = NULL;
-  }
-
   $sanitize = !empty($options['sanitize']);
 
   // Webform tokens (caching globally).
@@ -53,7 +43,7 @@ function webform_document_tokens($type, $tokens, array $data = array(), array $o
     // Webform submission tokens for individual components.
     if ($value_tokens = token_find_with_prefix($tokens, 'options')) {
       foreach ($value_tokens as $name => $original) {
-        foreach ($node->webform['components'] as $cid => $component) {
+        foreach ($node->webform['components'] as $component) {
           // Build the list of parents for this component.
           $parents = ($component['pid'] == 0) ? array($component['form_key']) : webform_component_parent_keys($node, $component);
           $parent_token = implode(':', $parents);

@@ -222,7 +222,7 @@ function webform_document_apply_replacements($input_file, $data = array(), $cust
 
   $zip->addFromString('word/document.xml', $xml);
 
-  // Close zip file
+  // Close zip file.
   if ($zip->close() === FALSE) {
     drupal_set_message(t('Could not close zip file %filename.', array('%filename' => $filled_file)), 'error');
     return FALSE;
