@@ -3,5 +3,6 @@ description = Replace tokens with Webform component values in Word documents.
 package = Webform
 core = 7.x
 
-dependencies[] = webform (>=4.x)
+dependencies[] = file
 dependencies[] = token
+dependencies[] = webform (>=4.x)
