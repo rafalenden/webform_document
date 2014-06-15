@@ -80,9 +80,8 @@ function webform_document_submission_page($node, $submission) {
     return;
   }
 
-  $file = file_load($node->webform['document_template']['fid']);
-  if (empty($file)) {
-    drupal_set_message(t('Input file do not exists.'), 'error');
+  if (!($file = file_load($node->webform['document_template']['fid']))) {
+    drupal_set_message(t('Input file file does not exist.'), 'error');
     return;
   }
 
@@ -166,21 +165,13 @@ function webform_document_convert($input_file) {
 /**
  * Apply token replacements in provided file.
  *
- * @param  string $input_file          File path to file wihich replacements will be made.
+ * @param  string $input_file          File path to file which replacements will be made.
  * @param  array  $data                (optional) An array of keyed objects.
  * @param  array  $custom_replacements (optional) Custom replacement tokens to apply.
  * @return bool                        Return TRUE on success, FALSE otherwise.
  */
 function webform_document_apply_replacements($input_file, $data = array(), $custom_replacements = array()) {
-  $pathinfo = pathinfo($input_file);
-
-  $filled_dir = WEBFORM_DOCUMENT_FILLED_DIR;
-  $filled_file = drupal_realpath($filled_dir . '/' . $pathinfo['basename']);
-  file_prepare_directory($filled_dir, FILE_CREATE_DIRECTORY);
-
-  // Copy the source file to the temp file.
-  copy($input_file, $filled_file);
-
+  $filled_file = file_unmanaged_copy($input_file, drupal_realpath(WEBFORM_DOCUMENT_FILLED_DIR));
   $zip = new ZipArchive();
 
   if ($zip->open($filled_file)) {
@@ -196,11 +187,13 @@ function webform_document_apply_replacements($input_file, $data = array(), $cust
       $xml = str_replace($value, $modified, $xml);
     }
 
+    // There are custom replacements.
     if (!empty($custom_replacements)) {
       foreach ($custom_replacements as $replacement) {
         if (empty($replacement['search'])) {
           continue;
         }
+        // Replacement found.
         if (strpos($xml, $replacement['search']) !== FALSE) {
           if (strpos($replacement['replace'], '[') !== FALSE) {
             $replacement['replace'] = token_replace($replacement['replace'], $data);
@@ -255,6 +248,12 @@ function webform_document_webform_submission_insert($node, $submission) {
   }
 }
 
+/**
+ * Get path to LibreOffice.
+ *
+ * @return bool|string
+ *   Path to LibreOffice when found, FALSE otherwise.
+ */
 function webform_document_libreoffice_path() {
   if (!module_exists('libraries')) {
     return FALSE;
@@ -262,7 +261,7 @@ function webform_document_libreoffice_path() {
 
   $libreoffice_path = libraries_get_path('libreoffice_cde');
 
-  // LibreOffice does not exists.
+  // LibreOffice file does not exist.
   if (!$libreoffice_path || !file_exists($libreoffice_path . '/cde.options')) {
     return FALSE;
   }
