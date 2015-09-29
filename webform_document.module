@@ -87,8 +87,10 @@ function webform_document_submission_page($node, $submission) {
 
   $pathinfo = pathinfo($file->uri);
   $input_file = $file->uri;
-  $filled_file = WEBFORM_DOCUMENT_FILLED_DIR . '/' . $pathinfo['filename'] . '.docx';
-  $output_file = WEBFORM_DOCUMENT_OUTPUT_DIR . '/' . $pathinfo['filename'] . '.pdf';
+
+  $filled_dir = WEBFORM_DOCUMENT_FILLED_DIR;
+  $filled_file = $filled_dir . '/' . $pathinfo['filename'] . '.docx';
+  file_prepare_directory($filled_dir, FILE_CREATE_DIRECTORY | FILE_MODIFY_PERMISSIONS);
 
   $data = array(
     'node' => $node,
@@ -98,6 +100,9 @@ function webform_document_submission_page($node, $submission) {
   webform_document_apply_replacements($input_file, $data, $node->webform['document_template']['custom_replacements']);
 
   if ($node->webform['document_template']['output_type'] == 'pdf') {
+    $output_dir = WEBFORM_DOCUMENT_OUTPUT_DIR;
+    $output_file = $output_dir . '/' . $pathinfo['filename'] . '.pdf';
+    file_prepare_directory($output_file, FILE_CREATE_DIRECTORY | FILE_MODIFY_PERMISSIONS);
     webform_document_convert($filled_file);
     webform_document_download($output_file);
   }
