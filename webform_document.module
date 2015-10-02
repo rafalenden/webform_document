@@ -184,11 +184,9 @@ function webform_document_apply_replacements($input_file, $data = array(), $cust
 
     $pattern = '|\[([^\}]+)\]|U';
     preg_match_all($pattern, $xml, $matches);
-    $opened_tag_pattern = '/<[^>]+>/';
-    $closed_tag_pattern = '/<\/[^>]+>/';
+
     foreach ($matches[0] as $value) {
-      $modified = preg_replace($opened_tag_pattern, '', $value);
-      $modified = preg_replace($closed_tag_pattern, '', $modified);
+      $modified = strip_tags($value);
       $xml = str_replace($value, $modified, $xml);
     }
 
